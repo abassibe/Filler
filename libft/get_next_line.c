@@ -6,7 +6,7 @@
 /*   By: abassibe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/23 13:49:33 by abassibe          #+#    #+#             */
-/*   Updated: 2017/08/28 04:30:13 by abassibe         ###   ########.fr       */
+/*   Updated: 2017/09/19 03:25:51 by abassibe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #include <fcntl.h>
 #include <stdio.h>
 
-static t_buff	*create_lst(t_buff **buff, int fd, int chk)
+t_buff		*gnl_crea_lst(t_buff **buff, int fd, int chk)
 {
 	t_buff		*new;
 
@@ -36,7 +36,7 @@ static t_buff	*create_lst(t_buff **buff, int fd, int chk)
 	return (new);
 }
 
-static t_buff	*check_buff(t_buff **cpy, int fd)
+t_buff		*check_buff(t_buff **cpy, int fd)
 {
 	while (*cpy)
 	{
@@ -47,7 +47,7 @@ static t_buff	*check_buff(t_buff **cpy, int fd)
 	return (NULL);
 }
 
-static int		clean_buff(t_buff *cpy, char **line, int fd)
+int			clean_buff(t_buff *cpy, char **line, int fd)
 {
 	int		i;
 
@@ -58,8 +58,8 @@ static int		clean_buff(t_buff *cpy, char **line, int fd)
 	{
 		if (cpy->buff[i] == '\n' || cpy->buff[i] == '\0')
 		{
-			*line = ft_strjoin(*line, ft_strsub(cpy->buff, 0, i));
-			cpy->buff = ft_strsub(cpy->buff, i + 1, ft_strlen(cpy->buff));
+			*line = ft_strjoinf(*line, ft_strsub(cpy->buff, 0, i));
+			cpy->buff = ft_strsubf(cpy->buff, i + 1, ft_strlen(cpy->buff));
 			cpy->ind = 0;
 			return (1);
 		}
@@ -70,7 +70,7 @@ static int		clean_buff(t_buff *cpy, char **line, int fd)
 	return (read_file(cpy, line, fd));
 }
 
-int				read_file(t_buff *cpy, char **line, int fd)
+int			read_file(t_buff *cpy, char **line, int fd)
 {
 	int				i;
 	int				ret;
@@ -82,7 +82,7 @@ int				read_file(t_buff *cpy, char **line, int fd)
 		cpy->buff[ret] = '\0';
 		if (ft_strchr(cpy->buff, '\n') != NULL)
 			return (clean_buff(cpy, line, fd));
-		*line = ft_strjoin(*line, cpy->buff);
+		*line = ft_strjoinfn(*line, cpy->buff);
 	}
 	if (ret == -1)
 		return (-1);
@@ -93,7 +93,7 @@ int				read_file(t_buff *cpy, char **line, int fd)
 	return (1);
 }
 
-int				get_next_line(const int fd, char **line)
+int			get_next_line(const int fd, char **line)
 {
 	static t_buff	*buff;
 	t_buff			*cpy;
@@ -101,11 +101,11 @@ int				get_next_line(const int fd, char **line)
 	if (line == NULL || fd < 0 || BUFF_SIZE <= 0)
 		return (-1);
 	if (!buff)
-		buff = create_lst(NULL, fd, 0);
+		buff = gnl_crea_lst(NULL, fd, 0);
 	cpy = buff;
 	if (!check_buff(&cpy, fd))
-		cpy = create_lst(&buff, fd, 1);
-	*line = ft_strnew(BUFF_SIZE + 1);
+		cpy = gnl_crea_lst(&buff, fd, 1);
+	*line = ft_strnew(0);
 	if (cpy->ind != -1)
 		if (clean_buff(cpy, line, fd))
 			return (1);

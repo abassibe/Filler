@@ -6,78 +6,83 @@
 /*   By: abassibe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/31 04:22:26 by abassibe          #+#    #+#             */
-/*   Updated: 2017/09/12 03:45:45 by abassibe         ###   ########.fr       */
+/*   Updated: 2017/09/23 04:41:22 by abassibe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/filler.h"
 
-void			get_x_piece(t_fill *e, const char *str)
+static void		fill_tab(t_fill *e, const char *str)
 {
-	if (ft_strncmp("Piece ", str, 6) == 0)
-		e->xp = ft_atoi(&str[6]);
-}
+	int		x;
+	int		y;
 
-void			get_y_piece(t_fill *e, const char *str)
-{
-	int		i;
-
-	i = 6;
-	if (ft_strncmp("Piece ", str, 6) == 0)
+	x = ft_atoi(str);
+	y = -1;
+	while (++y < e->y)
 	{
-		while (str[i] >= '0' && str[i] <= '9')
-			i++;
-		i++;
-		e->yp = ft_atoi(&str[i]);
+		e->tab[x][y] = str[y + 4];
+		if (e->top_or_bot == 0 && e->tab[x][y] == e->player)
+			e->top_or_bot = 't';
+		if (e->top_or_bot == 0 && e->tab[x][y] == e->adv)
+			e->top_or_bot = 'b';
 	}
 }
 
-void			fill_piece(t_fill *e, const char *str)
-{
-	int		j;
-
-	j = 0;
-	if (str[0] == '.' || str[0] == '*')
-	{
-		while (j < 100)
-			e->piece[e->len_p][j++] = 0;
-		j = 0;
-		while (str[j])
-		{
-			e->piece[e->len_p][j] = str[j];
-			j++;
-		}
-		e->len_p++;
-		if (e->len_p == e->xp)
-			e->valid = 1;
-	}
-}
-
-void			crea_piece(t_fill *e)
+static void		crea_piece(t_fill *e)
 {
 	char	**tab;
 	int		i;
 
 	i = 0;
-	tab = NULL;
-	if (e->xp && e->yp && !e->piece)
-	{
-		if (!(tab = (char **)malloc(sizeof(char *) * 100)))
+	if (!(tab = (char **)ft_memalloc(sizeof(char *) * 150)))
+		ft_error("error malloc", 1);
+	while (i < 150)
+		if (!(tab[i++] = ft_strnew(150)))
 			ft_error("error malloc", 1);
-		while (i < 100)
-			if (!(tab[i++] = ft_strnew(100)))
-				ft_error("error malloc", 1);
-		e->piece = tab;
-	}
+	e->piece = tab;
 }
 
-void			fill_tab(t_fill *e, const char *str)
+static int		get_y_piece(const char *str)
 {
-	int		y;
-	int		x;
+	int		i;
 
-	y = -1;
-	x = ft_atoi(str);
-	while (++y < e->y)
-		e->tab[x][y] = str[y + 4];
+	i = 6;
+	while (str[i] >= '0' && str[i] <= '9')
+		i++;
+	i++;
+	return (ft_atoi(&str[i]));
+}
+
+static void		fill_piece(t_fill *e, const char *str)
+{
+	int		i;
+
+	i = 0;
+	while (i < 150)
+		e->piece[e->len_p][i++] = 0;
+	i = 0;
+	while (str[i])
+	{
+		e->piece[e->len_p][i] = str[i];
+		i++;
+	}
+	e->len_p++;
+	if (e->len_p == e->xp)
+		e->valid = 1;
+}
+
+void			maj_data(t_fill *e, const char *str)
+{
+	if (!e->piece)
+		crea_piece(e);
+	if (str[0] >= '0' && str[0] <= '9')
+		fill_tab(e, str);
+	if (str[0] == 'P' && str[1] == 'i')
+	{
+		e->xp = ft_atoi(&str[6]);
+		e->yp = get_y_piece(str);
+	}
+	if (str[0] == '.' || str[0] == '*')
+		fill_piece(e, str);
 }

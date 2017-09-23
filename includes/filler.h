@@ -6,7 +6,7 @@
 /*   By: abassibe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/23 00:34:29 by abassibe          #+#    #+#             */
-/*   Updated: 2017/09/12 01:02:04 by abassibe         ###   ########.fr       */
+/*   Updated: 2017/09/23 04:47:20 by abassibe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <stdlib.h>
 # include <stdio.h>
 # include <fcntl.h>
+# include "../ressources/mlx.h"
 
 typedef struct		s_fill
 {
@@ -31,7 +32,6 @@ typedef struct		s_fill
 	char			**piece;
 	int				len_p;
 	int				valid;
-	int				sbs;
 	int				save_x;
 	int				save_y;
 	int				range;
@@ -39,16 +39,23 @@ typedef struct		s_fill
 	int				save_py;
 	int				lborder;
 	int				rborder;
-	int fd;
+	int				tborder;
+	int				bborder;
+	void			*mlx;
+	void			*win;
+	void			*vimg;
+	char			*img;
+	int				sl;
+	int				garb;
+	int				draw;
+	int				border;
+	char			top_or_bot;
 }					t_fill;
 
 void				ft_error(char *error, int k);
 void				get_infos(t_fill *e, const char *str);
+void				maj_data(t_fill *e, const char *str);
 void				algo(t_fill *e);
-void				crea_piece(t_fill *e);
-void				fill_tab(t_fill *e, const char *str);
-void				fill_piece(t_fill *e, const char *str);
-void				get_x_piece(t_fill *e, const char *str);
-void				get_y_piece(t_fill *e, const char *str);
+void				mlx_set(t_fill *e);
 
 #endif

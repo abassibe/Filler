@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   filler.c                                           :+:      :+:    :+:   */
+/*   filler1.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: abassibe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/08/23 00:38:10 by abassibe          #+#    #+#             */
-/*   Updated: 2017/09/12 04:18:59 by abassibe         ###   ########.fr       */
+/*   Created: 2017/09/23 01:33:51 by abassibe          #+#    #+#             */
+/*   Updated: 2017/09/23 05:16:30 by abassibe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../includes/filler.h"
+#include "../includes/filler.h"
 
 void			ft_error(char *error, int k)
 {
@@ -18,34 +18,24 @@ void			ft_error(char *error, int k)
 		ft_printf("%s\n", error);
 	else
 		perror(error);
-	exit(1);
+	exit(0);
 }
 
 static t_fill	*set_struct(void)
 {
-	t_fill	*e;
-
-	if (!(e = (t_fill *)malloc(sizeof(t_fill))))
+	t_fill  *e;
+	if (!(e = ft_memalloc(sizeof(t_fill))))
 		ft_error("error malloc", 1);
+	return (e);
+	e->tab = NULL;
 	e->player = 0;
 	e->adv = 0;
 	e->x = 0;
 	e->y = 0;
-	e->xp = 0;
-	e->yp = 0;
-	e->tab = NULL;
-	e->piece = NULL;
+	e->sl = 0;
+	e->top_or_bot = 0;
 	e->len_p = 0;
-	e->valid = 0;
-	e->range = 10000;
-	e->sbs = 0;
-	e->save_x = 0;
-	e->save_y = 0;
-	e->save_px = 0;
-	e->save_py = 0;
-	e->lborder = 0;
-	e->rborder = 0;
-	return (e);
+	e->win = NULL;
 }
 
 int				main()
@@ -54,21 +44,26 @@ int				main()
 	char	*str;
 
 	e = set_struct();
-	e->fd = open("../tst", O_RDWR, O_CREAT);
+	e->mlx = mlx_init();
 	while (get_next_line(0, &str))
 	{
 		get_infos(e, str);
-		if (e->player && e->x && e->y)
+		if (e->tab)
 		{
-			if (str[0] >= '0' && str[0] <= '9')
-				fill_tab(e, str);
-			get_x_piece(e, str);
-			get_y_piece(e, str);
-			if (!e->piece)
-				crea_piece(e);
-			fill_piece(e, str);
+			maj_data(e, str);
+			if (!e->win)
+			{
+				dprintf(2, "TEEEEEEEEEEEEEEEEEEEEEST\n");
+				e->win = mlx_new_window(e->mlx, e->y * 10, e->x * 10, "Filler");
+				e->vimg = mlx_new_image(e->mlx, e->y * 10, e->x * 10);
+				e->img = mlx_get_data_addr(e->vimg, &e->garb, &e->sl, &e->garb);
+			}
 			if (e->valid == 1)
+			{
 				algo(e);
+				mlx_set(e);
+				mlx_put_image_to_window(e->mlx, e->win, e->vimg, 0, 0);
+			}
 		}
 	}
 }

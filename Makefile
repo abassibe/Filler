@@ -6,16 +6,17 @@
 #    By: abassibe <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/02/01 12:45:46 by abassibe          #+#    #+#              #
-#    Updated: 2017/08/31 05:23:20 by abassibe         ###   ########.fr        #
+#    Updated: 2017/09/23 04:44:25 by abassibe         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = abassibe.filler
 
 SRCS =	filler.c \
+		algo.c \
 		parcing.c \
 		parcing_2.c \
-		algo.c \
+		mlx.c
 
 OBJS = $(SRCS:.c=.o)
 
@@ -27,7 +28,8 @@ all: $(NAME)
 
 $(NAME): $(OBJS)
 	@make -C libft
-	@gcc $(FLAGS) $(OBJS) libft/libft.a -o $(NAME)
+	@gcc $(FLAGS) $(OBJS) libft/libft.a ressources/libmlx.a -o $(NAME) \
+		-L. -framework OpenGL -framework AppKit
 
 %.o: $(SRCPATH)%.c
 	@gcc $(FLAGS) -c $< -I includes/

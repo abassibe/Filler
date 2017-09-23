@@ -6,38 +6,11 @@
 /*   By: abassibe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/30 05:17:27 by abassibe          #+#    #+#             */
-/*   Updated: 2017/09/12 04:19:22 by abassibe         ###   ########.fr       */
+/*   Updated: 2017/09/23 04:48:31 by abassibe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/filler.h"
-
-static int		is_side_by_side(t_fill *e)
-{
-	int		x;
-	int		y;
-
-	x = -1;
-	y = -1;
-	while (++x < e->x)
-	{
-		while (++y < e->y)
-		{
-			if (y < e->y - 1 && (e->tab[x][y] == e->player || e->tab[x][y] == e->player + 32) && (e->tab[x][y + 1] == e->adv || e->tab[x][y + 1] == e->adv + 32))
-				e->sbs = 1;
-			else if (y > 0 && (e->tab[x][y] == e->player || e->tab[x][y] == e->player + 32) && (e->tab[x][y - 1] == e->adv || e->tab[x][y - 1] == e->adv + 32))
-				e->sbs = 1;
-			else if (x < e->x - 1 && (e->tab[x][y] == e->player || e->tab[x][y] == e->player + 32) && (e->tab[x + 1][y] == e->adv || e->tab[x + 1][y] == e->adv + 32))
-				e->sbs = 1;
-			else if (x > 0 && (e->tab[x][y] == e->player || e->tab[x][y] == e->player + 32) && (e->tab[x - 1][y] == e->adv || e->tab[x - 1][y] == e->adv + 32))
-				e->sbs = 1;
-			if (e->sbs == 1)
-				return (1);
-		}
-		y = -1;
-	}
-	return (0);
-}
 
 static int		check_placement(t_fill *e, const int x, const int y)
 {
@@ -54,9 +27,9 @@ static int		check_placement(t_fill *e, const int x, const int y)
 	{
 		while (++yp < e->yp)
 		{
-			if (e->piece[xp][yp] == '*' && (e->tab[x + xp][y + yp] == e->adv || e->tab[x + xp][y + yp] == e->adv + 32))
+			if (e->piece[xp][yp] == '*' && e->tab[x + xp][y + yp] == e->adv)
 				return (0);
-			if (e->piece[xp][yp] == '*' && (e->tab[x + xp][y + yp] == e->player || e->tab[x + xp][y + yp] == e->player + 32))
+			if (e->piece[xp][yp] == '*' && e->tab[x + xp][y + yp] == e->player)
 			{
 				count++;
 				e->save_px = x;
@@ -130,7 +103,7 @@ static void		range(t_fill *e)
 
 	x = -1;
 	y = -1;
-	e->range = 1000;
+	e->range = 10000;
 	while (++x < e->x)
 	{
 		while (++y < e->y)
@@ -139,44 +112,8 @@ static void		range(t_fill *e)
 		y = -1;
 	}
 }
-
-int				get_left_border(t_fill *e, const int xt, const int yt)
-{
-	int		x;
-	int		y;
-
-	x = e->save_px;
-	y = e->save_py;
-	while (y > 0)
-	{
-		if (e->tab[x][y] == e->adv)
-			return (0);
-		y--;
-	}
-	e->save_x = xt;
-	e->save_y = yt;
-	return (1);
-}
-
-int				get_right_border(t_fill *e, const int xt, const int yt)
-{
-	int		x;
-	int		y;
-
-	x = e->save_px;
-	y = e->save_py;
-	while (y > e->y)
-	{
-		if (e->tab[x][y] == e->adv)
-			return (0);
-		y++;
-	}
-	e->save_x = xt;
-	e->save_y = yt;
-	return (1);
-}
-
-void			get_border(t_fill *e)
+/*
+static void		top_or_bot(t_fill *e)
 {
 	int		x;
 	int		y;
@@ -185,68 +122,64 @@ void			get_border(t_fill *e)
 	y = -1;
 	while (++x < e->x)
 	{
-		if (e->tab[x][0] == e->player || e->tab[x][0] == e->player + 32)
-			e->lborder = 1;
 		while (++y < e->y)
-			if (check_placement(e, x, y))
-				if (!e->lborder && get_left_border(e, x , y))
-					return ;
-		y = -1;
-	}
-	x = -1;
-	y = -1;
-	while (++x < e->x)
-	{
-		if (e->tab[x][e->x] == e->player || e->tab[x][e->x] == e->player + 32)
-			e->rborder = 1;
-		while (++y < e->y)
-			if (check_placement(e, x, y))
-				if (!e->rborder && get_right_border(e, x, y))
-					return ;
-		y = -1;
-	}
-}
-
-void		auto_fill(t_fill *e)
-{
-	int		x;
-	int		y;
-
-	x = 0;
-	y = 0;
-	while (x < e->x)
-	{
-		while (y < e->y)
 		{
-			if (check_placement(e, x, y))
+			if (e->tab[x][y] == e->player)
 			{
-				e->save_x = x;
-				e->save_y = y;
+				e->top_or_bot = 1;
 				return ;
 			}
-			y++;
+			if (e->tab[x][y] == e->adv)
+			{
+				e->top_or_bot = 2;
+				return ;
+			}
 		}
-		x++;
-		y = 0;
+		y = -1;
 	}
-	ft_printf("0 0\n");
-	exit (0);
 }
 
+static void		get_rb_border(t_fill *e)
+{
+	int		x;
+	int		y;
+
+	x = -1;
+	y = -1;
+	if (!e->rborder)
+	{
+		while (++x < e->x)
+		{
+			while (++y < e->y)
+			{
+				if (check_placement(e, x, y))
+				{
+					e->save_x = x;
+					e->save_y = y;
+				}
+			}
+			y = -1;
+		}
+	}
+}
+
+static void		get_border(t_fill *e)
+{
+	if (e->top_or_bot == 0)
+		top_or_bot(e);
+	if (e->top_or_bot == 1)
+		get_rb_border(e);
+	else if (e->top_or_bot == 2)
+		get_lt_border(e);
+}
+*/
 void			algo(t_fill *e)
 {
-//	sleep(1);
-	if (e->sbs == 0 && !(is_side_by_side(e)))
-		range(e);
-	else if (!e->lborder && !e->rborder)
-		get_border(e);
-	else
-		auto_fill(e);
+//	get_border(e);
+	range(e);
 	e->xp = 0;
 	e->yp = 0;
 	e->valid = 0;
 	e->len_p = 0;
 	ft_printf("%d %d\n", e->save_x, e->save_y);
-	e->save_x = 0;
-	e->save_y = 0;
 }
