@@ -6,7 +6,7 @@
 /*   By: abassibe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/23 01:33:51 by abassibe          #+#    #+#             */
-/*   Updated: 2017/09/23 05:16:30 by abassibe         ###   ########.fr       */
+/*   Updated: 2017/09/26 06:38:15 by abassibe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,27 @@ void			ft_error(char *error, int k)
 	exit(0);
 }
 
+void			draw_img(t_fill *e, const int x, const int y, const int color)
+{
+	int		i;
+	char	red;
+	char	green;
+	char	blue;
+
+	red = color >> 16;
+	green = (color << 8) >> 16;
+	blue = (color << 16) >> 16;
+	i = (x * 4) + (y * e->sl);
+	e->img[i] = red;
+	e->img[i + 1] = green;
+	e->img[i + 2] = blue;
+	e->img[i + 3] = 0;
+}
+
 static t_fill	*set_struct(void)
 {
-	t_fill  *e;
+	t_fill	*e;
+
 	if (!(e = ft_memalloc(sizeof(t_fill))))
 		ft_error("error malloc", 1);
 	return (e);
@@ -33,12 +51,13 @@ static t_fill	*set_struct(void)
 	e->x = 0;
 	e->y = 0;
 	e->sl = 0;
-	e->top_or_bot = 0;
 	e->len_p = 0;
 	e->win = NULL;
+	e->save_x = -1;
+	e->save_y = -1;
 }
 
-int				main()
+int				main(void)
 {
 	t_fill	*e;
 	char	*str;
@@ -53,7 +72,6 @@ int				main()
 			maj_data(e, str);
 			if (!e->win)
 			{
-				dprintf(2, "TEEEEEEEEEEEEEEEEEEEEEST\n");
 				e->win = mlx_new_window(e->mlx, e->y * 10, e->x * 10, "Filler");
 				e->vimg = mlx_new_image(e->mlx, e->y * 10, e->x * 10);
 				e->img = mlx_get_data_addr(e->vimg, &e->garb, &e->sl, &e->garb);

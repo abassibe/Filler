@@ -6,28 +6,11 @@
 /*   By: abassibe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/13 02:17:38 by abassibe          #+#    #+#             */
-/*   Updated: 2017/09/23 04:47:23 by abassibe         ###   ########.fr       */
+/*   Updated: 2017/09/26 06:43:47 by abassibe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/filler.h"
-
-void			draw_img(t_fill *e, const int x, const int y, const int color)
-{
-	int		i;
-	char	red;
-	char	green;
-	char	blue;
-
-	red = color >> 16;
-	green = (color << 8) >> 16;
-	blue = (color << 16) >> 16;
-	i = (x * 4) + (y * e->sl);
-	e->img[i] = red;
-	e->img[i + 1] = green;
-	e->img[i + 2] = blue;
-	e->img[i + 3] = 0;
-}
 
 static void		fill_window(t_fill *e)
 {
@@ -48,7 +31,7 @@ static void		fill_window(t_fill *e)
 	}
 }
 
-void			draw_grid(t_fill *e)
+static void		draw_grid(t_fill *e)
 {
 	int		x;
 	int		y;
@@ -71,7 +54,7 @@ void			draw_grid(t_fill *e)
 	e->draw = 1;
 }
 
-static void		draw_piece(t_fill *e, int xt, int yt, const int color, const int color2)
+static void		draw_piece(t_fill *e, int xt, int yt, const int color2)
 {
 	int		x;
 	int		y;
@@ -85,7 +68,7 @@ static void		draw_piece(t_fill *e, int xt, int yt, const int color, const int co
 			if (x > xt + 7 || y > yt + 7)
 				draw_img(e, y, x, color2);
 			else
-				draw_img(e, y, x, color);
+				draw_img(e, y, x, e->color);
 			x++;
 		}
 		x = xt + 1;
@@ -105,9 +88,15 @@ static void		draw_tab(t_fill *e)
 		while (y < e->y)
 		{
 			if (e->tab[x][y] == e->player)
-				draw_piece(e, x * 10, y * 10, 0xFF0000, 0xFF7777);
+			{
+				e->color = 0xFF0000;
+				draw_piece(e, x * 10, y * 10, 0xFF7777);
+			}
 			else if (e->tab[x][y] == e->adv)
-				draw_piece(e, x * 10, y * 10, 0x0000FF, 0x7777FF);
+			{
+				e->color = 0x0000FF;
+				draw_piece(e, x * 10, y * 10, 0x7777FF);
+			}
 			y++;
 		}
 		y = 0;

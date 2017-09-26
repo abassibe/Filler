@@ -6,7 +6,7 @@
 /*   By: abassibe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/28 03:40:18 by abassibe          #+#    #+#             */
-/*   Updated: 2017/09/23 04:36:41 by abassibe         ###   ########.fr       */
+/*   Updated: 2017/09/26 06:36:58 by abassibe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static char		**crea_tab(const int x, const int y)
 	i = 0;
 	if (!(tab = (char **)ft_memalloc(sizeof(char *) * x)))
 		ft_error("error malloc", 1);
-	while (i < y)
+	while (i < x)
 		if (!(tab[i++] = ft_strnew(y)))
 			ft_error("eror malloc", 1);
 	return (tab);
@@ -53,7 +53,6 @@ static int		get_y(const char *str)
 
 void			get_infos(t_fill *e, const char *str)
 {
-
 	if (!e->player && str[0] == '$')
 		get_player_id(e, str);
 	if (!e->x && (str[0] == 'P' && str[1] == 'l'))

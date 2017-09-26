@@ -6,7 +6,7 @@
 /*   By: abassibe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/31 04:22:26 by abassibe          #+#    #+#             */
-/*   Updated: 2017/09/23 04:41:22 by abassibe         ###   ########.fr       */
+/*   Updated: 2017/09/26 06:17:32 by abassibe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,7 @@ static void		fill_tab(t_fill *e, const char *str)
 	x = ft_atoi(str);
 	y = -1;
 	while (++y < e->y)
-	{
 		e->tab[x][y] = str[y + 4];
-		if (e->top_or_bot == 0 && e->tab[x][y] == e->player)
-			e->top_or_bot = 't';
-		if (e->top_or_bot == 0 && e->tab[x][y] == e->adv)
-			e->top_or_bot = 'b';
-	}
 }
 
 static void		crea_piece(t_fill *e)
@@ -82,6 +76,8 @@ void			maj_data(t_fill *e, const char *str)
 	{
 		e->xp = ft_atoi(&str[6]);
 		e->yp = get_y_piece(str);
+		if (e->xp > 150 || e->yp > 150)
+			ft_error("Piece too big", 1);
 	}
 	if (str[0] == '.' || str[0] == '*')
 		fill_piece(e, str);
