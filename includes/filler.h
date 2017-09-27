@@ -6,7 +6,7 @@
 /*   By: abassibe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/23 00:34:29 by abassibe          #+#    #+#             */
-/*   Updated: 2017/09/26 06:42:26 by abassibe         ###   ########.fr       */
+/*   Updated: 2017/09/27 06:00:44 by abassibe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@
 # include <stdlib.h>
 # include <stdio.h>
 # include <fcntl.h>
-# include "../ressources/mlx.h"
 
 typedef struct		s_fill
 {
@@ -37,14 +36,6 @@ typedef struct		s_fill
 	int				range;
 	int				save_px;
 	int				save_py;
-	void			*mlx;
-	void			*win;
-	void			*vimg;
-	char			*img;
-	int				sl;
-	int				garb;
-	int				draw;
-	int				color;
 }					t_fill;
 
 void				ft_error(char *error, int k);
@@ -52,8 +43,5 @@ void				get_infos(t_fill *e, const char *str);
 void				maj_data(t_fill *e, const char *str);
 void				algo(t_fill *e);
 void				check_range(t_fill *e, const int xt, const int yt);
-void				mlx_set(t_fill *e);
-void				draw_img(t_fill *e, const int x,
-		const int y, const int color);
 
 #endif
