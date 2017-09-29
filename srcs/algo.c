@@ -6,7 +6,7 @@
 /*   By: abassibe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/30 05:17:27 by abassibe          #+#    #+#             */
-/*   Updated: 2017/09/27 05:58:51 by abassibe         ###   ########.fr       */
+/*   Updated: 2017/09/28 04:39:47 by abassibe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ static void		range(t_fill *e)
 	{
 		count = 0;
 		while (++y < e->y)
-			if ((x + e->xp < e->x && y + e->yp < e->y) &&
+			if ((x + e->xp <= e->x && y + e->yp <= e->y) &&
 					check_placement(e, x, y, count))
 				check_range(e, x, y);
 		y = -1;

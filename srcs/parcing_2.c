@@ -6,7 +6,7 @@
 /*   By: abassibe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/31 04:22:26 by abassibe          #+#    #+#             */
-/*   Updated: 2017/09/27 05:58:13 by abassibe         ###   ########.fr       */
+/*   Updated: 2017/09/28 05:22:41 by abassibe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,18 +23,18 @@ static void		fill_tab(t_fill *e, const char *str)
 		e->tab[x][y] = str[y + 4];
 }
 
-static void		crea_piece(t_fill *e)
+static char		**crea_piece(void)
 {
-	char	**tab;
+	char	**piece;
 	int		i;
 
 	i = 0;
-	if (!(tab = (char **)ft_memalloc(sizeof(char *) * 150)))
+	if (!(piece = (char **)ft_memalloc(sizeof(char *) * 150)))
 		ft_error("error malloc", 1);
 	while (i < 150)
-		if (!(tab[i++] = ft_strnew(150)))
+		if (!(piece[i++] = ft_strnew(150)))
 			ft_error("error malloc", 1);
-	e->piece = tab;
+	return (piece);
 }
 
 static int		get_y_piece(const char *str)
@@ -69,7 +69,7 @@ static void		fill_piece(t_fill *e, const char *str)
 void			maj_data(t_fill *e, const char *str)
 {
 	if (!e->piece)
-		crea_piece(e);
+		e->piece = crea_piece();
 	if (str[0] >= '0' && str[0] <= '9')
 		fill_tab(e, str);
 	if (str[0] == 'P' && str[1] == 'i')

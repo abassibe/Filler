@@ -6,7 +6,7 @@
 /*   By: abassibe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/23 01:33:51 by abassibe          #+#    #+#             */
-/*   Updated: 2017/09/27 05:57:51 by abassibe         ###   ########.fr       */
+/*   Updated: 2017/09/28 05:23:44 by abassibe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ static t_fill	*set_struct(void)
 
 	if (!(e = ft_memalloc(sizeof(t_fill))))
 		ft_error("error malloc", 1);
-	return (e);
 	e->tab = NULL;
 	e->player = 0;
 	e->adv = 0;
@@ -36,6 +35,7 @@ static t_fill	*set_struct(void)
 	e->len_p = 0;
 	e->save_x = -1;
 	e->save_y = -1;
+	return (e);
 }
 
 int				main(void)
@@ -51,9 +51,10 @@ int				main(void)
 		{
 			maj_data(e, str);
 			if (e->valid == 1)
-			{
 				algo(e);
-			}
 		}
+		ft_strdel(&str);
 	}
+	free(e);
+	return (1);
 }

@@ -6,7 +6,7 @@
 #    By: abassibe <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/02/01 12:45:46 by abassibe          #+#    #+#              #
-#    Updated: 2017/09/27 05:57:32 by abassibe         ###   ########.fr        #
+#    Updated: 2017/09/28 03:29:14 by abassibe         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,7 +31,7 @@ $(NAME): $(OBJS)
 	@gcc $(FLAGS) $(OBJS) libft/libft.a -o $(NAME)
 
 %.o: $(SRCPATH)%.c
-	@gcc $(FLAGS) -c $< -I includes/filler.h
+	@gcc $(FLAGS) -c $< -I includes
 
 .PHONY: all clean fclean re
 
